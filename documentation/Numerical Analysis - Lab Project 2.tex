@@ -1,0 +1,140 @@
+\documentclass[12pt, a4paper]{article}
+
+% Γλώσσα και Κωδικοποίηση
+\usepackage[utf8]{inputenc}
+\usepackage[greek,english]{babel}
+\selectlanguage{greek}
+\usepackage{alphabeta}
+\usepackage{textgreek}  % Για ελληνικά γράμματα σε μαθηματική λειτουργία
+\newcommand{\lt}[1]{\textlatin{#1}}
+\usepackage{enumitem}
+
+% Μαθηματικά
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Μορφοποίηση Σελίδας και Διάστιχο
+\usepackage{geometry}
+\geometry{left=3cm, right=2cm, top=4cm, bottom=3cm}
+\usepackage{setspace}
+\setstretch{1.5}
+
+% Χρώματα και Ορισμοί
+\usepackage{xcolor}
+\definecolor{maroon}{HTML}{AF3235}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+% Πακέτο για monospace κώδικα
+\usepackage{verbatim}
+
+% Εικόνες
+\usepackage{graphicx}
+\graphicspath{{images/}}
+
+% Εντολή για άδεια σελίδα
+\usepackage{afterpage}
+\newcommand\blankpage{%
+	\null
+	\thispagestyle{empty}%
+	\addtocounter{page}{-1}%
+	\newpage}
+
+\begin{document}
+	
+\begin{titlepage}
+	\begin{center}
+		\HRule \\[0.6cm] 
+		{\huge \bfseries \strut Numerical Analysis - Lab Project 2} \\[0.4cm] 
+		\HRule \\[1.5cm]
+		{\large \textbf{Topic:}} \\
+		{\largeNumerical Integration Utility using Composite Trapezoidal and Simpson's 1/3 Rules} \\[2cm]
+		
+		\vfill 
+		\begin{doublespacing}
+			{\huge Antonios Zacharias\\}
+			{\large \textbf{BSc} in Mathematics, AUTh\\}
+			{\large \textbf{MSc} in Communication Networks \& System Security \\
+			Computer Science Department, AUTh}
+		\end{doublespacing}
+	
+		\vspace*{1cm} 
+		\end{center}
+\end{titlepage}	
+	
+
+		
+% --- Part 1: Composite Trapezoidal Rule ---
+\section*{1. Composite Trapezoidal Rule (trapezoid)}
+\textbf{Implementation Logic}: The function \texttt{trapezoid} calculates the definite integral of a function $f$ over the interval $[a, b]$ by applying the composite trapezoidal rule.
+
+\begin{itemize}
+	\item \textbf{Algorithm}: The interval is partitioned into $n$ equal subintervals, each with a width of $h = (b-a)/n$.
+	\item \textbf{Mechanism}: A \texttt{for} loop calculates the sum of the function values at all internal points from $x_1$ to $x_{n-1}$.
+	\item \textbf{Calculation}: The final integral value is produced by the standard formula:
+	\begin{equation*}
+		I = \frac{h}{2} \left[ f(a) + f(b) + 2 \sum_{i=1}^{n-1} f(x_i) \right]
+	\end{equation*}
+\end{itemize}
+
+\textbf{Execution Example}:
+\begin{verbatim}
+	>> f = @(x) x.*exp(2*x);
+	>> trapezoid(f, 0, 4, 8)
+	ans = 5764.76
+\end{verbatim}
+
+\newpage
+
+% --- Part 2: Composite Simpson's 1/3 Rule ---
+\section*{2. Composite Simpson's 1/3 Rule (simpson)}
+\textbf{Implementation Logic}: The function \texttt{simpson} handles numerical integration using the composite Simpson's 1/3 rule for increased precision.
+
+\begin{itemize}
+	\item \textbf{Constraint}: An \texttt{if} statement checks if $n$ is an even number; if not, the function displays an error message and terminates.
+	\item \textbf{Algorithm}: The function evaluates $f(x)$ at each grid point and applies weights based on the index: 4 for odd and 2 for even.
+	\item \textbf{Mechanism}: A \texttt{for} loop iterates through the internal points, using \texttt{mod(i, 2)} to identify the correct weight for each term.
+	\item \textbf{Calculation}: The sum is combined with the endpoints using the formula:
+	\begin{equation*}
+		J = \frac{h}{3} \left[ f(a) + f(b) + \sum (\text{weighted internal points}) \right]
+	\end{equation*}
+\end{itemize}
+
+\textbf{Execution Example}:
+\begin{verbatim}
+	>> f = @(x) x.*exp(2*x);
+	>> simpson(f, 0, 4, 4)
+	ans = 5670.975
+\end{verbatim}
+
+\newpage
+
+% --- Part 3: Double Integration (doubleint) ---
+\section*{3. Double Integration (doubleint)}
+\textbf{Implementation Logic}: The function \texttt{doubleint} acts as a modular tool to compute double integrals over rectangular domains.
+
+\begin{itemize}
+	\item \textbf{Modular Execution}: The integration is performed layer-by-layer. It defines a temporary function $g(x) = f(x, y_i)$ for each $y$ step.
+	\item \textbf{Integration Flow}: 
+	\begin{enumerate}
+		\item It calls the \texttt{trapezoid} and \texttt{simpson} functions to solve the inner integral with respect to $x$.
+		\item It then accumulates these results to perform the outer integration with respect to $y$.
+	\end{enumerate}
+\end{itemize}
+
+\textbf{Execution Example}:
+\begin{verbatim}
+	>> f = @(x,y) x + y.^3;
+	>> doubleint(f, 0, 4, 1, 3, 4, 2)
+	trapezoid = 104
+	simpson = 96 
+	
+	Examples Verified via MATLAB Command Window
+\end{verbatim}
+
+
+
+\end{document}
+
+
+
+
