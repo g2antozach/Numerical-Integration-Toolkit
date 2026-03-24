@@ -1,4 +1,4 @@
-# Numerical Integration Utility (MATLAB)
+# Numerical Integration Utility 
 
 This repository contains a MATLAB implementation of composite numerical integration methods for single and double integrals. This project was developed as part of the Numerical Analysis curriculum at the **Aristotle University of Thessaloniki (AUTh)**.
 
